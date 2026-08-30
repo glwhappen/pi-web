@@ -1,0 +1,18 @@
+# 国内构建加速：npm 走 npmmirror；next/font/google 构建期拉字体可能不稳，
+# 若 build 失败可加 --build-arg FONT_SOURCE=system 或改用 node:24-bookworm-slim
+FROM node:24-alpine AS builder
+WORKDIR /app
+RUN npm config set registry https://registry.npmmirror.com
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:24-alpine
+ENV NODE_ENV=production
+WORKDIR /app
+RUN npm config set registry https://registry.npmmirror.com
+# 从构建阶段拷整个应用（含 .next 与 node_modules）
+COPY --from=builder /app ./
+EXPOSE 30241
+CMD ["node", "bin/pi-web.js", "-p", "30241", "-H", "0.0.0.0", "--no-open"]
