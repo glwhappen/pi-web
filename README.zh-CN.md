@@ -66,6 +66,8 @@ pi-web -p 8080 -H 0.0.0.0 --no-open
 PI_WEB_PASSWORD='足够长的随机密码' pi-web --hostname 0.0.0.0
 ```
 
+浏览器会看到 `/login` 登录页，登录后写入 7 天有效的会话 cookie（`pi-web-auth`），不再弹出原生 Basic Auth 对话框。命令行客户端（如 `curl -u pi:<密码>`）以及浏览器已缓存的凭证仍走 Basic Auth。已登录时再次访问 `/login` 可登出。
+
 Basic Auth 不会加密传输中的密码。不要通过明文 HTTP 将 Pi Web 暴露到互联网；远程访问应使用可信反向代理提供 HTTPS，或通过可信 VPN。如果反向代理传递外部主机名，请把该名称精确加入 `PI_WEB_ALLOWED_HOSTS`。这个白名单不会改变 Pi Web 的监听地址。
 
 ### HTTP 代理

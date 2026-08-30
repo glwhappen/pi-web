@@ -65,6 +65,8 @@ Binding to a non-loopback address exposes an agent that can execute high-privile
 PI_WEB_PASSWORD='a-long-random-password' pi-web --hostname 0.0.0.0
 ```
 
+Browsers see a login page at `/login` and keep a 7-day session cookie (`pi-web-auth`) instead of the native Basic Auth dialog. Command-line clients (e.g. `curl -u pi:<password>`) and existing cached browser credentials continue to use Basic Auth. Sign out by revisiting `/login` while signed in.
+
 Basic Auth does not encrypt the password in transit. Do not expose Pi Web over plain HTTP to the internet; use HTTPS through a trusted reverse proxy or a trusted VPN. If a reverse proxy sends an external hostname, add that exact name to `PI_WEB_ALLOWED_HOSTS`. This allow-list does not change the address Pi Web binds to.
 
 ### HTTP Proxy
